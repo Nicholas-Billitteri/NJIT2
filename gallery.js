@@ -33,29 +33,33 @@ function animate() {
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
 
 function swapPhoto() {
-	//Add code here to access the #slideShow element.
-	//Access the img element and replace its source
-	//with a new image from your images array which is loaded 
-	//from the JSON string
+	//calls id element photo, location.
+//index repeats itself
+if(mCurrentIndex  >= mImages.length) {
+	    // If it is, set the index back to 0 to loop back to the beginning
 
-	if(mCurrentIndex >= mImages.length){
-			mCurrentIndex = 0;
-	}
+	mCurrentIndex = 0;
+}
+// Check if the current index is less than 0
 
-	if(mCurrentIndex < 0){
-			mCurrentIndex = mImages.length-1;
-	}
+if(mCurrentIndex  < 0) {
+	mCurrentIndex = mImages.length-1;
+}
+// Updates current image, location, description and date
 
-	document.getElementById('photo').src = mImages[mCurrentIndex].img;
-	var location = document.getElementsByClassName('location');
-	location[0].innerHTML = "Location: " + mImages[mCurrentIndex].location;
-	var description = document.getElementsByClassName('description');
-	description[0].innerHTML = "Description: " + mImages[mCurrentIndex].description;
-	var date = document.getElementsByClassName('date');
-	date[0].innerHTML = "Date: " + mImages[mCurrentIndex].date;
+document.getElementById('photo').src = mImages[mCurrentIndex].img;
+var location = document.getElementsByClassName('location');
+location[0].innerHTML = 'Location: ' + mImages[mCurrentIndex].location;
+var description = document.getElementsByClassName('description');
+description[0].innerHTML = 'Description: ' + mImages[mCurrentIndex].description;
+var date = document.getElementsByClassName('date')
+date[0].innerHTML = 'Date: ' + mImages[mCurrentIndex].date;
 
-	mLastFrameTime = 0;
-	mCurrentIndex += 1;
+// Reset the last frame time
+mLastFrameTime =0;
+// Increment the current index by 1
+mCurrentIndex +=1;
+
 }
 
 // Counter for the mImages array
@@ -68,34 +72,36 @@ var mRequest = new XMLHttpRequest();
 var mImages = [];
 
 // Holds the retrived JSON information
-var mJson;
+var mJson = "";
 
 // URL for the JSON to load by default
 // Some options for you are: images.json, images.short.json; you will need to create your own extra.json later
 var mUrl = 'https://api.npoint.io/fc43f6c04cfd5a9b51a5';
 
-//Part 2 slideshow
 function fetchJSON() {
-	mRequest.onreadystatechange = function() {
-		console.log("on ready state change");
-		if(this.readyState == 4 && this.status == 200) {
+	mRequest.onreadystatechange = function () {
+		  // Define the onreadystatechange function
+		console.log("on ready state change")
+		if (this.readyState == 4 && this.status == 200) {
+			      // Parse the responseText as JSON
 			mJson = JSON.parse(mRequest.responseText);
 			iterateJSON(mJson);
 		}
 	}
+	//created json object which pulls data from an image. 
 	mRequest.open("GET", mUrl, true);
-	mRequest.send();
-
-	iterateJSON(mJson);
+	mRequest.send ();
 }
 
-function iterateJSON(mJson) {
-	for (x = 0; x < mJson.images.length; x++) {
-		mImages[x] = new GalleryImage();
-		mImages[x].location = mJson.images[x].imgLocation
-		mImages[x].description = mJson.images[x].description
-		mImages[x].date = mJson.images[x].date
-		mImages[x].img = mJson.images[x].imgPath
+function iterateJSON() {
+  // Loop through the images in the JSON
+	for (let x = 0; x < mJson.images.length; x++){
+mImages[x] = new GalleryImage();
+mImages[x].location = mJson.images[x].imgLocation;
+mImages[x].description = mJson.images[x].description;
+mImages[x].img = mJson.images[x].imgPath;
+mImages[x].date = mJson.images[x].date;
+
 	}
 }
 
@@ -109,17 +115,52 @@ function makeGalleryImageOnloadCallback(galleryImage) {
 }
 
 $(document).ready( function() {
-	
-	// This initially hides the photos' metadata information
-	//$('.details').eq(0).hide();
-	fetchJSON()
-});
+	fetchJSON();
+$( ".moreIndicator" ).click(function() {
+	  //  if the clicked element has the class then it will add and remove classes,
+	  //if not it will do 'else'
 
-window.addEventListener('load', function() {
-	
-	console.log('window loaded');
+	if ($(this).hasClass("rot90")) {
+		$(this).removeClass("rot90");
+		$(this).addClass("rot270");
+		$( ".details" ).slideToggle( "slow" );
 
-}, false);
+	  } else {
+		$(this).removeClass("rot270");
+		$(this).addClass("rot90");
+		$( ".details" ).slideToggle( "slow" );
+
+	  }
+	});
+  });
+
+
+$(document).ready(function() {
+	$("#nextPhoto").click(function() {
+		swapPhoto();
+	});
+  });
+
+  $(document).ready(function() {
+	$("#prevPhoto").click(function() {
+	//calls id element photo, location.
+//index repeats itself
+if(mCurrentIndex  >= mImages.length) {
+	// If it is, set the index back to 0 to loop back to the beginning
+
+mCurrentIndex = 0;
+}
+
+if(mCurrentIndex  < 0) {
+mCurrentIndex = mImages.length-1;
+}
+
+// Reset the last frame time
+mLastFrameTime =0;
+// Increment the current index by 1
+mCurrentIndex -=1;
+	});
+  });
 
 function GalleryImage() {
 	var location = '';
