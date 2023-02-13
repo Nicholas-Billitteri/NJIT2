@@ -76,8 +76,10 @@ var mJson = "";
 
 // URL for the JSON to load by default
 // Some options for you are: images.json, images.short.json; you will need to create your own extra.json later
-var mUrl = 'https://api.npoint.io/fc43f6c04cfd5a9b51a5';
-
+var mUrl = 'https://api.npoint.io/148dc1c318884cf83bb0';
+if (mUrl == undefined) {
+  mUrl = 'https://api.npoint.io/604b0462b01a39f0ab8f'
+}
 function fetchJSON() {
 	mRequest.onreadystatechange = function () {
 		  // Define the onreadystatechange function
